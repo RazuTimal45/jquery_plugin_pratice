@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+         body{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color:#f5f5f5;
+        }
+        .container{
+           text-align:center;
+           background-color: #16213e;
+           padding: 30px;
+           border-radius: 12px;
+           box-shadow:0 8px 16px rgba(0,0,0,0.2);
+           width:400px;
+           height:500px;
+           max-width:90%; 
+        }
+        h1{
+            color:#e94560;
+            margin-bottom:10px;
+            font-size:2em;
+        }
+        #text-to-type{
+            font-size: 1.1em;
+            background:#0f3460;
+            padding:15px;
+            border-radius:8px;
+            color:#f5f5f5;
+            margin-bottom:20px;
+            line-height:1.6;
+            word-wrap:break-word;
+            border:2px solid #e94560;
+        }
+        textarea{
+            width:100%;
+            height:100px;
+            padding:10px;
+            margin-bottom:20px;
+            font-size:1em;
+            border-radius:8px;
+            outline:none;
+            resize:none;
+            background-color: #1a1a2e;
+            color:#f5f5f5;
+        }
+        #result{
+            font-size: 1.2em;
+            margin-top:20px;
+            color:#08d9d6;
+        }
+        #start-btn{
+            background-color: #e94560;
+            color: #f5f5f5;
+            padding:10px 20px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            font-size:1em;
+            transition:background 0.3s;
+        }
+        #start-btn:hover{
+            background-color: #ff2e63;
+
+        }
+        #start-btn:active{
+            transform:scale(0.98);
+        }
+        .hidden{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Typing Speed Game</h1>
+        <div id="text-to-type"></div>
+        <textarea id="user-input" placeholder="start typing ...."></textarea>
+        <div id="result"></div>
+        <button id="start-btn">Start</button>
+    </div>
+    <script>
+        const textToType = "The quick brown fox jumps over the lazy dog. The Lazy Dog Jumps Over The Quick Brown Fox."
+        let startTime, endTime, timer;
+
+        const textDisplay = document.getElementById('text-to-type');
+        const userInput = document.getElementById('user-input');
+        const resultDisplay = document.getElementById('result');
+        const startButton = document.getElementById('start-btn');
+
+        startButton.addEventListener('click', startGame);
+        function startGame(){
+            userInput.value = '';
+            userInput.disabled = false;
+            userInput.focus();
+            textDisplay.textContent = textToType;
+            resultDisplay.textContent = '';
+            startButton.textContent = "Typing ....";
+            startButton.disabled = true;
+            startTime = new Date().getTime();
+
+            clearTimeout(timer);
+
+            timer = setTimeout(endGame, 30000);
+            userInput.removeEventListener('input',checkInput);
+            userInput.addEventListener('input', checkInput);
+
+            
+        }
+        function checkInput(){
+            const inputText = userInput.value.trim();
+            if(inputText === textToType){
+                endGame();
+            }
+        }
+        function endGame(){
+            endTime = new Date().getTime();
+            clearTimeout(timer);
+            calculateResult();
+        }
+        function calculateResult(){
+            const timeTaken = (endTime - startTime) / 1000;
+            const wordsTyped = userInput.value.trim().split(' ').length;
+            const speed = (wordsTyped / timeTaken) * 60;
+
+            const correctChars = getCorrectCharacters(userInput.value, textToType);
+            const accuracy = (correctChars/textToType.length) * 100;
+
+            resultDisplay.textContent = `Your Typing Speed is ${Math.round(speed)} WPM, Accuracy is ${Math.round(accuracy)}`;
+            userInput.disabled = true;
+            startButton.textContent = "Start Again";
+            startButton.disabled = false;
+
+        }
+        function getCorrectCharacters(input, target){
+            let correctChars = 0;
+            for(let i=0;i<input.length;i++){
+                if(input[i] === target[i]){
+                    correctChars++;
+                }
+            }
+            return correctChars;
+
+        }
+    </script>
+
+</body>
+</html>

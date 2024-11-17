@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .chessboard-container{
+            display: grid;
+            margin:auto;
+            grid-template-columns: repeat(8,40px);
+            grid-template-rows: repeat(8,40px);
+            width: 320px;
+            height:320px;
+            border:2px solid rgb(88, 22, 22);            
+        }
+        .black-box{
+            background-color: black;
+        }
+        .white-box{
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="chessboard-container">
+
+    </div>
+    <script>
+        const container = document.querySelector('.chessboard-container');
+        for(let i=0;i<8;i++){
+            for(let j=0;j<8;j++){
+                const box = document.createElement('div');
+                if((i+j)%2===0){
+                    box.className = 'black-box';
+                } else{
+                    box.className = 'white-box';
+                }
+                container.appendChild(box);
+            }
+        }
+    </script>
+</body>
+</html>

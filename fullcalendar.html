@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        .custom-dropdown-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .custom-dropdown-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .fc-toolbar-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-5">
+        <div class="card">
+            <div class="card-header">
+                <h5>My Calendar</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-end my-2">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle custom-dropdown-btn" type="button" id="viewDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            Day <i class="fa fa-chevron-down ms-2"></i>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="viewDropdown">
+                            <li><a class="dropdown-item" href="#" data-view="dayGridMonth">Month</a></li>
+                            <li><a class="dropdown-item" href="#" data-view="dayGridWeek">Week</a></li>
+                            <li><a class="dropdown-item" href="#" data-view="dayGridDay">Day</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+
+            // Initialize FullCalendar
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridDay',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: ''
+                },
+                events: [], // Add your events here
+                slotDuration: '00:30:00',
+                slotLabelFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    meridiem: 'short'
+                },
+                allDaySlot: false,
+
+                // Handle date click
+                dateClick: function (info) {
+                    const selectedDate = info.dateStr.split('T')[0];
+                    alert(`Date selected: ${selectedDate}`);
+                },
+
+                // Handle event click
+                eventClick: function (info) {
+                    const eventStart = info.event.start;
+                    const startTime = eventStart.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    alert(`Event clicked: ${startTime}`);
+                }
+            });
+
+            calendar.render();
+
+            // Handle view changes via dropdown
+            document.querySelectorAll('.dropdown-item[data-view]').forEach(item => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const viewName = this.getAttribute('data-view');
+                    calendar.changeView(viewName);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
